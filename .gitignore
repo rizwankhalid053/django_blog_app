@@ -1,0 +1,16 @@
+
+.env
+db.sqlite3
+*.sqlite3
+
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# PyCharm IDE Configuration files
+.idea/
+
+# Media and Static files directories
+media/
+staticfiles/
