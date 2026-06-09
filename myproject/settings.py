@@ -8,6 +8,16 @@ import os
 from pathlib import Path
 
 # ==============================================================================
+# 0. ENVIRONMENT VARIABLE LOADER
+# ==============================================================================
+try:
+    from dotenv import load_dotenv
+    BASE_DIR = Path(__file__).resolve().parent.parent
+    load_dotenv(os.path.join(BASE_DIR, ".env"))
+except ImportError:
+    load_dotenv = None
+
+# ==============================================================================
 # 1. FALLBACK IMPORT ENGINE (Bypasses local network/proxy installation blocks)
 # ==============================================================================
 try:
@@ -97,8 +107,8 @@ WSGI_APPLICATION = 'myproject.wsgi.application'
 # ==============================================================================
 # 3. SMART DATABASE ROUTING MATRIX
 # ==============================================================================
-if HAS_PROD_DB_ENGINE and os.environ.get('DATABASE_URL'):
-    # This runs when deployed live in production on the cloud (Supabase)
+# Safely checks if DATABASE_URL exists and isn't commented/empty
+if HAS_PROD_DB_ENGINE and os.environ.get('DATABASE_URL', '').strip():
     DATABASES = {
         'default': dj_database_url.config(
             default=os.environ.get('DATABASE_URL'),
@@ -106,7 +116,7 @@ if HAS_PROD_DB_ENGINE and os.environ.get('DATABASE_URL'):
         )
     }
 else:
-    # This runs locally on your machine, bypassing the proxy completely!
+    # Safe local fallback configuration (bypasses network proxy filters)
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
