@@ -101,7 +101,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'django_blog_app.wsgi.application'
+WSGI_APPLICATION = 'myproject.wsgi.application'
 
 
 # ==============================================================================
